@@ -1,0 +1,14 @@
+{
+  "require": {
+    "kreait/firebase-php": "^4.35",
+    "ext-json": "*"
+  },
+  "config": {
+    "optimize-autoloader": true
+  },
+  "autoload": {
+    "psr-4": {
+      "Louis\\": "src/"
+    }
+  }
+}

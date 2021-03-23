@@ -1,0 +1,43 @@
+h1 {
+    color: red;
+}
+
+/* Patch processing design of table library */
+.dataTables_processing {
+    height: auto !important;
+    background-clip: content-box !important;;
+    background-color: white !important;;
+    padding-top: 25px !important;;
+}
+
+@keyframes spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.dataTables_processing:before {
+    content: '';
+    box-sizing: border-box;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    margin-top: 4px;
+    margin-left: -28px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    border-top-color: #000;
+    animation: spinner 1s linear infinite;
+}
+
+.page-title {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+
+.myTable {
+    margin-left: 10px;
+    margin-right: 10px;
+}

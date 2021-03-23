@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <title>Louis-bac</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css">
+    <script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-analytics.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/plug-ins/1.10.20/api/processing().js"></script>
+
+</head>
+<body>
+<!-- Nav bar -->
+<nav class="navbar navbar-light bg-light">
+    <span class="navbar-brand mb-0 h1">Navbar de Louis</span>
+</nav>
+
+<div class="app">
+    <h1 class="page-title">Base de donnée en temps réel</h1>
+    <div class="myTable">
+        <table id="realtimeTable" class="display" style="width: 100%">
+        </table>
+    </div>
+</div>
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script>
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyC8wvBFLH1yuqZZngMsP2LqhVzGoAxDVKQ",
+    authDomain: "louis-bac-2020.firebaseapp.com",
+    //databaseURL: "https://louis-bac-2020.firebaseio.com"
+    databaseURL: "https://evan-bac-2021-default-rtdb.firebaseio.com/",
+    projectId: "louis-bac-2020",
+    storageBucket: "louis-bac-2020.appspot.com",
+    messagingSenderId: "18167975300",
+    appId: "1:18167975300:web:3be533c2c8ff5d6b53a1d1",
+    measurementId: "G-9NSTV952E8"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+
+  $(document).ready(function () {
+    let datatable = $('#realtimeTable').DataTable(
+      {
+        processing: true,
+        columns: [
+          {title: "Index", data: "index"},
+          {title: "Temperature", data: "temperature"},
+          {title: "Altitude", data: "altitude"},
+        ],
+        language: {
+          processing: "Traitement en cours...",
+          search: "Rechercher&nbsp;:",
+          lengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
+          info: "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+          infoEmpty: "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+          infoFiltered: "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+          infoPostFix: "",
+          loadingRecords: "Chargement en cours...",
+          zeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
+          emptyTable: "Aucune donnée disponible dans le tableau",
+          paginate: {
+            first: "Premier",
+            previous: "Pr&eacute;c&eacute;dent",
+            next: "Suivant",
+            last: "Dernier"
+          },
+          aria: {
+            sortAscending: ": activer pour trier la colonne par ordre croissant",
+            sortDescending: ": activer pour trier la colonne par ordre décroissant"
+          }
+        }
+      }
+    );
+    datatable.processing(true);
+
+    function onDataChange(snapshot) {
+      const value = snapshot.val();
+
+      datatable.clear();
+      datatable.processing(false);
+      let result = [];
+      for (const index in value) {
+        const item = value[index];
+        result.push({
+          index: index,
+          temperature: item.temperature,
+          altitude: item.altitude,
+        });
+      }
+      datatable.rows.add(result);
+      datatable.draw();
+    }
+
+
+    const table = firebase.database().ref('drone_data');
+    table.on('value', onDataChange);
+  });
+
+
+  console.log(
+    " _                 _     \n" +
+    "| |               (_)    \n" +
+    "| |     ___  _   _ _ ___ \n" +
+    "| |    / _ \\| | | | / __|\n" +
+    "| |___| (_) | |_| | \\__ \\\n" +
+    "\\_____/\\___/ \\__,_|_|___/\n" +
+    "                         \n" +
+    "                         "
+  );
+</script>
+</body>
+</html>

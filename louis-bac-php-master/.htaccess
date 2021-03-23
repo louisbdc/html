@@ -1,0 +1,9 @@
+DirectorySlash Off
+DirectoryIndex index.php
+RewriteEngine On
+
+# redirect all url to index.php except favicon.ico
+# This prevent direct access to src files
+RewriteCond %{REQUEST_URI} !favicon.ico
+RewriteCond %{REQUEST_URI} !^/index\.php$ [NC]
+RewriteRule ^(.+)$ /index.php?q=$1 [L,QSA]
